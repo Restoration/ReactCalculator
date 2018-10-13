@@ -61,7 +61,7 @@ class Board extends React.Component {
         });
         console.log(this.state);
     }
-    // caliculaor
+    // calculate
     clickEqual(){
         let tmp = this.state.tmp;
         let operator = this.state.operator;
@@ -90,12 +90,23 @@ class Board extends React.Component {
         });
 
     }
+    clickReset(e){
+        this.setState({
+            history: [{
+                number : "",
+            }],
+            result: 0,
+            tmp1: 0,
+            tmp2: 0,
+            operator: null,
+        });
+    }
     render() {
        return (
             <div className="container">
                 <div className="result">{this.state.result}</div>
                 <div className="board-row">
-                    <button className="square">AC</button>
+                    <button className="square" onClick={this.clickReset.bind(this)}>AC</button>
                     <button className="square">+/-</button>
                     <button className="square">%</button>
                     <button className="square" data-operator="divided" onClick={this.clickOperator.bind(this)}>÷</button>
