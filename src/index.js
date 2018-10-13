@@ -4,10 +4,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
-function cal(){
-
-}
-
 
 class Board extends React.Component {
     constructor(props) {
@@ -29,8 +25,11 @@ class Board extends React.Component {
         //console.log(e.target.value);
         //console.log(current);
         //console.log(history);
-        //if(operator  == null){
 
+        // controle dot
+        if(num == '.' && history.length == 1  ){
+            return;
+        }
 
             let result = '';
             for(let key in history){
@@ -70,16 +69,16 @@ class Board extends React.Component {
         let sum;
         switch(operator){
             case 'plus':
-                sum = parseInt(tmp) + parseInt(result);
+                sum = parseFloat(tmp) + parseFloat(result);
             break;
             case 'minus':
-                sum = parseInt(tmp) - parseInt(result);
+                sum = parseFloat(tmp) - parseFloat(result);
             break;
             case 'times':
-                sum = parseInt(tmp) * parseInt(result);
+                sum = parseFloat(tmp) * parseFloat(result);
             break;
             case 'divided':
-                sum = parseInt(tmp) / parseInt(result);
+                sum = parseFloat(tmp) / parseFloat(result);
             break;
         }
         this.setState({
@@ -93,14 +92,13 @@ class Board extends React.Component {
     clickPercent(e){
         let tmp = this.state.tmp;
         let result = this.state.result;
-        let sum = parseInt(result) / 100;
+        let sum = parseFloat(result) / 100;
         this.setState({
             tmp:0,
             operator : null,
             result : sum,
         });
     }
-
     clickReset(e){
         this.setState({
             history: [{
@@ -141,7 +139,7 @@ class Board extends React.Component {
                 </div>
                 <div className="board-row">
                     <button className="square zero" value="0" onClick={this.clickHandler.bind(this)}>0</button>
-                    <button className="square">.</button>
+                    <button className="square" value="." onClick={this.clickHandler.bind(this)}>.</button>
                     <button className="square" onClick={this.clickEqual.bind(this)}>=</button>
                 </div>
             </div>
