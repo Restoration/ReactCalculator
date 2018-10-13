@@ -3,6 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+
+function cal(){
+
+}
+
+
 class Board extends React.Component {
     constructor(props) {
         super(props);
@@ -11,21 +17,23 @@ class Board extends React.Component {
                 number : "",
             }],
             result: 0,
+            tmp1: 0,
+            tmp2: 0,
+            operator: null,
         };
     }
     clickHandler(e){
         const history = this.state.history;
         const current = history[history.length - 1];
+        const operator = this.state.operator;
         let num = e.target.value;
         //console.log(e.target.value);
         //console.log(current);
         //console.log(history);
+        //if(operator  == null){
 
-        let result = '';
-        if( num == 0   ){
-            result = 0;
-            this.setState({result : result});
-        } else {
+
+            let result = '';
             for(let key in history){
                 result += history[key].number;
             }
@@ -36,8 +44,40 @@ class Board extends React.Component {
                 }]),
                 result : result,
             });
-        }
 
+    }
+    // get operator
+    clickOperator(e){
+        const history = this.state.history;
+        const result = this.state.result;
+        let operator = e.target.getAttribute('data-operator');
+        this.setState({
+            history: [{
+                number : "",
+            }],
+            tmp: result,
+            operator : operator,
+            result : "",
+        });
+        console.log(this.state);
+    }
+    // caliculaor
+    clickEqual(){
+        let tmp = this.state.tmp;
+        let operator = this.state.operator;
+        let result = this.state.result;
+        console.log(tmp);
+        console.log(result);
+        switch(operator){
+            case 'plus':
+                let sum = parseInt(tmp) + parseInt(result);
+                this.setState({
+                    tmp:0,
+                    operator : null,
+                    result : sum,
+                });
+            break;
+        }
     }
     render() {
        return (
@@ -65,12 +105,12 @@ class Board extends React.Component {
                     <button className="square" value="1" onClick={this.clickHandler.bind(this)}>1</button>
                     <button className="square" value="2" onClick={this.clickHandler.bind(this)}>2</button>
                     <button className="square" value="3" onClick={this.clickHandler.bind(this)}>3</button>
-                    <button className="square">+</button>
+                    <button className="square" data-operator="plus" onClick={this.clickOperator.bind(this)}>+</button>
                 </div>
                 <div className="board-row">
                     <button className="square zero" value="0" onClick={this.clickHandler.bind(this)}>0</button>
                     <button className="square">.</button>
-                    <button className="square">=</button>
+                    <button className="square" onClick={this.clickEqual.bind(this)}>=</button>
                 </div>
             </div>
         );
