@@ -107,8 +107,7 @@ class Board extends React.Component {
                 number : "",
             }],
             result: 0,
-            tmp1: 0,
-            tmp2: 0,
+            tmp: 0,
             operator: null,
         });
     }
