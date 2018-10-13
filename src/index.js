@@ -68,16 +68,27 @@ class Board extends React.Component {
         let result = this.state.result;
         console.log(tmp);
         console.log(result);
+        let sum;
         switch(operator){
             case 'plus':
-                let sum = parseInt(tmp) + parseInt(result);
-                this.setState({
-                    tmp:0,
-                    operator : null,
-                    result : sum,
-                });
+                sum = parseInt(tmp) + parseInt(result);
+            break;
+            case 'minus':
+                sum = parseInt(tmp) - parseInt(result);
+            break;
+            case 'times':
+                sum = parseInt(tmp) * parseInt(result);
+            break;
+            case 'divided':
+                sum = parseInt(tmp) / parseInt(result);
             break;
         }
+        this.setState({
+            tmp:0,
+            operator : null,
+            result : sum,
+        });
+
     }
     render() {
        return (
@@ -87,19 +98,19 @@ class Board extends React.Component {
                     <button className="square">AC</button>
                     <button className="square">+/-</button>
                     <button className="square">%</button>
-                    <button className="square">÷</button>
+                    <button className="square" data-operator="divided" onClick={this.clickOperator.bind(this)}>÷</button>
                 </div>
                 <div className="board-row">
                     <button className="square" value="7" onClick={this.clickHandler.bind(this)}>7</button>
                     <button className="square" value="8" onClick={this.clickHandler.bind(this)}>8</button>
                     <button className="square" value="9" onClick={this.clickHandler.bind(this)}>9</button>
-                    <button className="square">×</button>
+                    <button className="square" data-operator="times" onClick={this.clickOperator.bind(this)}>×</button>
                 </div>
                 <div className="board-row">
                     <button className="square" value="4" onClick={this.clickHandler.bind(this)}>4</button>
                     <button className="square" value="5" onClick={this.clickHandler.bind(this)}>5</button>
                     <button className="square" value="6" onClick={this.clickHandler.bind(this)}>6</button>
-                    <button className="square">-</button>
+                    <button className="square" data-operator="minus" onClick={this.clickOperator.bind(this)}>-</button>
                 </div>
                 <div className="board-row">
                     <button className="square" value="1" onClick={this.clickHandler.bind(this)}>1</button>
