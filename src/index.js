@@ -3,110 +3,156 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-
-
 class Board extends React.Component {
     constructor(props) {
         super(props);
+/*
         this.state = {
             history: [{
                 number : "",
+                prev:"",
             }],
             result: 0,
             tmp: 0,
             operator: null,
+            minusFlg: true,
         };
+*/
+        this.state = {
+            history: [{
+                number : "",
+            }],
+            result: "",
+            left: 0,
+            right: 0,
+            operator: null,
+            minusFlg: true,
+            firstFlg: true,
+        };
+
+
     }
     clickHandler(e){
         const history = this.state.history;
         const current = history[history.length - 1];
         const operator = this.state.operator;
+        const firstFlg = this.state.firstFlg;
         let num = e.target.value;
-        //console.log(e.target.value);
-        //console.log(current);
-        //console.log(history);
 
         // controle dot
-        if(num == '.' && history.length == 1  ){
+        if(num == '.' && history.length == 1 ){
             return;
         }
 
-            let result = '';
-            for(let key in history){
-                result += history[key].number;
-            }
-            result += num;
-            this.setState({
-                history: history.concat([{
-                    number: num,
-                }]),
-                result : result,
-            });
+        let result = '';
+        for(let key in history){
+            result += history[key].number;
+        }
+        result += num;
+        console.log(result);
+        this.setState({
+            history: history.concat([{
+                number: num,
+            }]),
+            result : result,
+        });
+        if(firstFlg){
+            this.setState({left: result});
+        } else {
+            this.setState({right: result});
+        }
 
+        // minus option check
+        /*
+        let option = e.target.getAttribute('data-option');
+        if(option){
+            this.setState({minusFlg:false});
+            result = -(result);
+            result = String(result);
+        } else {
+            this.setState({minusFlg:true});
+        }
+        // set view
+        this.setState({
+            history: history.concat([{
+                number: num,
+            }]),
+            tmp : result,
+            result : result,
+        });
+        */
     }
     // get operator
     clickOperator(e){
         const history = this.state.history;
-        const result = this.state.result;
+        const result = this.state.history;
         let operator = e.target.getAttribute('data-operator');
         this.setState({
             history: [{
                 number : "",
             }],
-            tmp: result,
             operator : operator,
             result : "",
+            firstFlg: false,
         });
-        console.log(this.state);
     }
     // calculate
     clickEqual(){
-        let tmp = this.state.tmp;
+        const history = this.state.history;
+        let left = this.state.left;
+        let right = this.state.right;
         let operator = this.state.operator;
-        let result = this.state.result;
-        console.log(tmp);
-        console.log(result);
         let sum;
         switch(operator){
             case 'plus':
-                sum = parseFloat(tmp) + parseFloat(result);
+                sum = parseFloat(left) + parseFloat(right);
             break;
             case 'minus':
-                sum = parseFloat(tmp) - parseFloat(result);
+                sum = parseFloat(left) - parseFloat(right);
             break;
             case 'times':
-                sum = parseFloat(tmp) * parseFloat(result);
+                sum = parseFloat(left) * parseFloat(right);
             break;
             case 'divided':
-                sum = parseFloat(tmp) / parseFloat(result);
+                sum = parseFloat(left) / parseFloat(right);
             break;
         }
         this.setState({
-            tmp:0,
+            history: history.concat([{
+                number: "",
+            }]),
+            left: sum,
+            right: 0,
             operator : null,
-            result : sum,
+            result : String(sum),
         });
+        console.log(this.state);
+
 
     }
     // calculate percent
     clickPercent(e){
-        let tmp = this.state.tmp;
         let result = this.state.result;
         let sum = parseFloat(result) / 100;
         this.setState({
-            tmp:0,
+            left: sum,
             operator : null,
-            result : sum,
+            result : String(sum),
+            firstFlg: false,
         });
     }
+    // Reset
     clickReset(e){
         this.setState({
             history: [{
                 number : "",
             }],
             result: 0,
-            tmp: 0,
+            left: 0,
+            right: 0,
             operator: null,
+            minusFlg: true,
+            firstFlg: true,
         });
     }
     render() {
@@ -115,7 +161,7 @@ class Board extends React.Component {
                 <div className="result">{this.state.result}</div>
                 <div className="board-row">
                     <button className="square" onClick={this.clickReset.bind(this)}>AC</button>
-                    <button className="square">+/-</button>
+                    <button className="square" data-option={this.state.minusFlg} onClick={this.clickHandler.bind(this)}>+/-</button>
                     <button className="square" data-operator="percent" onClick={this.clickPercent.bind(this)}>%</button>
                     <button className="square" data-operator="divided" onClick={this.clickOperator.bind(this)}>÷</button>
                 </div>
