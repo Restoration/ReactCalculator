@@ -17,8 +17,7 @@ class Board extends React.Component {
                 number : "",
             }],
             result: 0,
-            tmp1: 0,
-            tmp2: 0,
+            tmp: 0,
             operator: null,
         };
     }
@@ -90,6 +89,18 @@ class Board extends React.Component {
         });
 
     }
+    // calculate percent
+    clickPercent(e){
+        let tmp = this.state.tmp;
+        let result = this.state.result;
+        let sum = parseInt(result) / 100;
+        this.setState({
+            tmp:0,
+            operator : null,
+            result : sum,
+        });
+    }
+
     clickReset(e){
         this.setState({
             history: [{
@@ -108,7 +119,7 @@ class Board extends React.Component {
                 <div className="board-row">
                     <button className="square" onClick={this.clickReset.bind(this)}>AC</button>
                     <button className="square">+/-</button>
-                    <button className="square">%</button>
+                    <button className="square" data-operator="percent" onClick={this.clickPercent.bind(this)}>%</button>
                     <button className="square" data-operator="divided" onClick={this.clickOperator.bind(this)}>÷</button>
                 </div>
                 <div className="board-row">
