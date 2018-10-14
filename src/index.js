@@ -143,6 +143,7 @@ class Board extends React.Component {
             operator : 'times',
             result : String(sum),
             firstFlg: false,
+            minusFlg: true,
         });
     }
     // Reset
