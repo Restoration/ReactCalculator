@@ -133,8 +133,12 @@ class Board extends React.Component {
     // calculate percent
     clickPercent(e){
         let result = this.state.result;
+        const history = this.state.history;
         let sum = parseFloat(result) / 100;
         this.setState({
+            history: [{
+                number: sum,
+            }],
             left: sum,
             operator : null,
             result : String(sum),
