@@ -3,53 +3,67 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+
 class Board extends React.Component {
     constructor(props) {
         super(props);
-/*
         this.state = {
             history: [{
                 number : "",
-                prev:"",
             }],
             result: 0,
-            tmp: 0,
-            operator: null,
-            minusFlg: true,
-        };
-*/
-        this.state = {
-            history: [{
-                number : "",
-            }],
-            result: "",
             left: 0,
             right: 0,
             operator: null,
             minusFlg: true,
             firstFlg: true,
         };
+    }
 
-
+    clickPlusMinus(e){
+        let option = e.target.getAttribute('data-option');
+        let result = this.state.result;
+        if(option){
+            result = -(result);
+            result = String(result);
+            if(result == 0){
+                result = "-0";
+            }
+            this.setState({
+                minusFlg:false,
+                result: result
+            });
+        } else {
+            this.setState({minusFlg:true});
+        }
     }
     clickHandler(e){
         const history = this.state.history;
         const current = history[history.length - 1];
         const operator = this.state.operator;
         const firstFlg = this.state.firstFlg;
-        let num = e.target.value;
 
+        const option = this.state.minusFlg;
+        let num = e.target.value;
         // controle dot
         if((num == '.' && history.length == 1 )
         || (num == 0 && history.length == 1 )){
             return;
         }
-
         let result = '';
         for(let key in history){
             result += history[key].number;
         }
         result += num;
+/*
+        console.log(option);
+        if(option){
+            result = -(result);
+            result = String(result);
+        }
+        console.log(result);
+*/
+
         this.setState({
             history: history.concat([{
                 number: num,
@@ -61,26 +75,7 @@ class Board extends React.Component {
         } else {
             this.setState({right: result});
         }
-
-        // minus option check
-        /*
-        let option = e.target.getAttribute('data-option');
-        if(option){
-            this.setState({minusFlg:false});
-            result = -(result);
-            result = String(result);
-        } else {
-            this.setState({minusFlg:true});
-        }
-        // set view
-        this.setState({
-            history: history.concat([{
-                number: num,
-            }]),
-            tmp : result,
-            result : result,
-        });
-        */
+        console.log(this.setState);
     }
     // get operator
     clickOperator(e){
@@ -94,6 +89,7 @@ class Board extends React.Component {
             operator : operator,
             result : "",
             firstFlg: false,
+            minusFlg: true,
         });
     }
     // calculate
@@ -102,8 +98,13 @@ class Board extends React.Component {
         let left = this.state.left;
         let right = this.state.right;
         let operator = this.state.operator;
-        console.log(operator);
         let sum;
+        if(operator == null){
+            return;
+        }
+        console.log(operator);
+        console.log(left);
+        console.log(right);
         switch(operator){
             case 'plus':
                 sum = parseFloat(left) + parseFloat(right);
@@ -166,7 +167,7 @@ class Board extends React.Component {
                 <div className="result">{this.state.result}</div>
                 <div className="board-row">
                     <button className="square" onClick={this.clickReset.bind(this)}>AC</button>
-                    <button className="square" data-option={this.state.minusFlg} onClick={this.clickHandler.bind(this)}>+/-</button>
+                    <button className="square" data-option={this.state.minusFlg} onClick={this.clickPlusMinus.bind(this)}>+/-</button>
                     <button className="square" data-operator="percent" onClick={this.clickPercent.bind(this)}>%</button>
                     <button className="square" data-operator="divided" onClick={this.clickOperator.bind(this)}>÷</button>
                 </div>
