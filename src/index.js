@@ -45,7 +45,8 @@ class Board extends React.Component {
 
         const option = this.state.minusFlg;
         let num = e.target.value;
-        // controle dot
+
+       // controle dot
         if((num == '.' && history.length == 1 )
         || (num == 0 && history.length == 1 )){
             return;
@@ -54,15 +55,18 @@ class Board extends React.Component {
         for(let key in history){
             result += history[key].number;
         }
-        result += num;
-/*
-        console.log(option);
-        if(option){
+
+        if((!firstFlg) && operator == null){
+            const right = this.state.right;
+            result = result * num;
+        } else {
+            result += num;
+        }
+        let viewResult = String(this.state.result);
+        if ( String(viewResult).indexOf('-') != -1) {
             result = -(result);
             result = String(result);
         }
-        console.log(result);
-*/
 
         this.setState({
             history: history.concat([{
@@ -75,7 +79,6 @@ class Board extends React.Component {
         } else {
             this.setState({right: result});
         }
-        console.log(this.setState);
     }
     // get operator
     clickOperator(e){
@@ -102,9 +105,6 @@ class Board extends React.Component {
         if(operator == null){
             return;
         }
-        console.log(operator);
-        console.log(left);
-        console.log(right);
         switch(operator){
             case 'plus':
                 sum = parseFloat(left) + parseFloat(right);
@@ -123,14 +123,12 @@ class Board extends React.Component {
             history: history.concat([{
                 number: "",
             }]),
+
             left: sum,
             right: 0,
             operator : null,
             result : String(sum),
         });
-        console.log(this.state);
-
-
     }
     // calculate percent
     clickPercent(e){
