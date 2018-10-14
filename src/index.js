@@ -40,7 +40,8 @@ class Board extends React.Component {
         let num = e.target.value;
 
         // controle dot
-        if(num == '.' && history.length == 1 ){
+        if((num == '.' && history.length == 1 )
+        || (num == 0 && history.length == 1 )){
             return;
         }
 
@@ -49,7 +50,6 @@ class Board extends React.Component {
             result += history[key].number;
         }
         result += num;
-        console.log(result);
         this.setState({
             history: history.concat([{
                 number: num,
@@ -102,6 +102,7 @@ class Board extends React.Component {
         let left = this.state.left;
         let right = this.state.right;
         let operator = this.state.operator;
+        console.log(operator);
         let sum;
         switch(operator){
             case 'plus':
@@ -137,10 +138,10 @@ class Board extends React.Component {
         let sum = parseFloat(result) / 100;
         this.setState({
             history: [{
-                number: sum,
+                number : "",
             }],
             left: sum,
-            operator : null,
+            operator : 'times',
             result : String(sum),
             firstFlg: false,
         });
